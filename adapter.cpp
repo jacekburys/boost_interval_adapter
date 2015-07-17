@@ -1,5 +1,5 @@
-#include <boost/numeric/interval.hpp>
 #include "float_interval.h"
+#include <boost/numeric/interval.hpp>
 #include <assert.h>
 
 using namespace boost::numeric;

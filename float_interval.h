@@ -1,4 +1,5 @@
-#include <boost/cstdint.hpp>
+#include <stdbool.h>
+#include <stdint.h>
 
 typedef struct float_interval {
   float lower;
@@ -6,6 +7,7 @@ typedef struct float_interval {
 } float_interval_t;
 
 #ifdef __cplusplus
+#include <boost/cstdint.hpp>
 extern "C" {
 #endif
   float_interval_t add_float_interval(float_interval_t in1, float_interval_t in2);
