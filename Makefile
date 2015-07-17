@@ -1,8 +1,10 @@
+CFLAGS = -std=c99
+
 main: main.o adapter.o
 	$(CXX) main.o adapter.o -o main
 
 main.o: main.c
-	$(CC) main.c -c -o main.o
+	$(CC) $(CFLAGS) main.c -c -o main.o
 
 adapter.o: adapter.cpp
 	$(CXX) adapter.cpp -c -o adapter.o
