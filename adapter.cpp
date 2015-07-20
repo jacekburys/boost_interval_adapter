@@ -56,8 +56,8 @@ bool is_singleton(float_interval_t in){
 }
 
 int not_float_interval(float_interval_t in){
-  if(equivalent_to_true(in)) return 1;
-  if(equivalent_to_false(in)) return 0;
+  if(equivalent_to_true(in)) return 0;
+  if(equivalent_to_false(in)) return 1;
   assert(false && "Invalid interval for ! operator");
   return 0;
 }
