@@ -71,19 +71,20 @@ float_interval_t bitnot_float_interval(float_interval_t in){
 
 ///////////
 
-bool interval_to_bool(float_interval_t in){
+bool float_interval_to_bool(float_interval_t in){
   if(equivalent_to_true(in)) return 1;
   if(equivalent_to_false(in)) return 0;
   assert(false && "Failed to cast interval to bool");
   return 0;
 }
 
+//this will evaluate both LHS and RHS, it shouldn't be like this
 int float_test_and(float_interval_t in1, float_interval_t in2){
-  return interval_to_bool(in1) && interval_to_bool(in2);
+  return float_interval_to_bool(in1) && float_interval_to_bool(in2);
 }
 
 int float_test_or(float_interval_t in1, float_interval_t in2){
-  return interval_to_bool(in1) || interval_to_bool(in2);
+  return float_interval_to_bool(in1) || float_interval_to_bool(in2);
 }
 
 int float_test_cmpeq(float_interval_t in1, float_interval_t in2){

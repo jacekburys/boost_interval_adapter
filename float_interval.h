@@ -25,7 +25,7 @@ extern "C" {
   int not_float_interval(float_interval_t in);
   float_interval_t bitnot_float_interval(float_interval_t in);
 
-  bool interval_to_bool(float_interval_t in);
+  bool float_interval_to_bool(float_interval_t in);
 
   int float_test_and(float_interval_t in1, float_interval_t in2);
   int float_test_or(float_interval_t in1, float_interval_t in2);
