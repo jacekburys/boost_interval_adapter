@@ -1,10 +1,24 @@
 #include "float_interval.h"
 #include <boost/numeric/interval.hpp>
 #include <assert.h>
+#include <stdio.h>
 
 using namespace boost::numeric;
 using namespace interval_lib;
 typedef interval<float> I;
+
+#ifdef TRACKING
+extern float_interval_t* tracked;
+static float_interval_t previous;
+
+void check(){
+  if(tracked->lower == previous.lower && tracked->upper == previous.upper){
+    return;
+  }
+  printf("Change detected: %f, %f", previous.lower, previous.upper);
+  previous = *tracked;
+}
+#endif
 
 I struct_to_interval(float_interval_t in){
   I result(in.lower, in.upper);
@@ -17,6 +31,9 @@ float_interval_t interval_to_struct(I in){
 }
 
 float_interval_t add_float_interval(float_interval_t in1, float_interval_t in2){
+  #ifdef TRACKING
+  check();
+  #endif
   return interval_to_struct(struct_to_interval(in1) + struct_to_interval(in2));
 }
 
