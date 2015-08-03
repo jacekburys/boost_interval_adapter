@@ -9,7 +9,6 @@ main.o: main.c
 adapter.o: adapter.cpp
 	$(CXX) adapter.cpp -c -o adapter.o
 
-
 clean:
 	rm -f main main.o adapter.o
 
