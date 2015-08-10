@@ -11,12 +11,29 @@ typedef interval<float> I;
 extern float_interval_t* tracked;
 static float_interval_t previous;
 
+bool initialized = false;
+
 void check(){
+//  printf("check\n");
+  if(!initialized){
+    previous = *tracked;
+    initialized = true;
+  }
   if(tracked->lower == previous.lower && tracked->upper == previous.upper){
     return;
   }
   printf("Change detected: %a, %a\n", previous.lower, previous.upper);
   previous = *tracked;
+}
+
+#endif
+
+#ifdef WIDE
+void check_wide(float_interval_t in){
+//  printf("check_wide\n");
+  if(in.lower < in.upper){
+    printf("Wide interval detected: [%a, %a]\n", in.lower, in.upper);
+  }
 }
 #endif
 
@@ -34,12 +51,20 @@ float_interval_t add_float_interval(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
+#endif
   return interval_to_struct(struct_to_interval(in1) + struct_to_interval(in2));
 }
 
 float_interval_t sub_float_interval(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
 #endif
   return interval_to_struct(struct_to_interval(in1) - struct_to_interval(in2));
 }
@@ -48,12 +73,20 @@ float_interval_t mul_float_interval(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
+#endif
   return interval_to_struct(struct_to_interval(in1) * struct_to_interval(in2));
 }
 
 float_interval_t div_float_interval(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
 #endif
   return interval_to_struct(struct_to_interval(in1) / struct_to_interval(in2));
 }
@@ -64,12 +97,18 @@ float_interval_t plus_float_interval(float_interval_t in){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in);
+#endif
   return interval_to_struct(+(struct_to_interval(in)));
 }
 
 float_interval_t minus_float_interval(float_interval_t in){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in);
 #endif
   return interval_to_struct(-(struct_to_interval(in)));
 }
@@ -123,12 +162,20 @@ int float_test_cmpeq(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
+#endif
   return struct_to_interval(in1) == struct_to_interval(in2);
 }
 
 int float_test_cmpne(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
 #endif
   return struct_to_interval(in1) != struct_to_interval(in2);
 }
@@ -137,12 +184,20 @@ int float_test_cmpgt(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
+#endif
   return struct_to_interval(in1) > struct_to_interval(in2);
 }
 
 int float_test_cmplt(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
 #endif
   return struct_to_interval(in1) < struct_to_interval(in2);
 }
@@ -151,12 +206,20 @@ int float_test_cmple(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
+#endif
   return struct_to_interval(in1) <= struct_to_interval(in2);
 }
 
 int float_test_cmpge(float_interval_t in1, float_interval_t in2){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in1);
+  check_wide(in2);
 #endif
   return struct_to_interval(in1) >= struct_to_interval(in2);
 }
@@ -265,6 +328,9 @@ int8_t float_interval_to_char(float_interval_t in){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in);
+#endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to char");
   return 0;
@@ -273,6 +339,9 @@ int8_t float_interval_to_char(float_interval_t in){
 int16_t float_interval_to_short(float_interval_t in){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in);
 #endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to short");
@@ -283,6 +352,9 @@ int32_t float_interval_to_int(float_interval_t in){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in);
+#endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to int");
   return 0;
@@ -291,6 +363,9 @@ int32_t float_interval_to_int(float_interval_t in){
 int32_t float_interval_to_long(float_interval_t in){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in);
 #endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to long");
@@ -301,6 +376,9 @@ int64_t float_interval_to_long_long(float_interval_t in){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in);
+#endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to long long");
   return 0;
@@ -309,6 +387,9 @@ int64_t float_interval_to_long_long(float_interval_t in){
 uint8_t float_interval_to_uchar(float_interval_t in){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in);
 #endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to unsigned char");
@@ -319,6 +400,9 @@ uint16_t float_interval_to_ushort(float_interval_t in){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in);
+#endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to unsigned short");
   return 0;
@@ -327,6 +411,9 @@ uint16_t float_interval_to_ushort(float_interval_t in){
 uint32_t float_interval_to_uint(float_interval_t in){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in);
 #endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to unsigned int");
@@ -337,6 +424,9 @@ uint32_t float_interval_to_ulong(float_interval_t in){
 #ifdef TRACKING
   check();
 #endif
+#ifdef WIDE
+  check_wide(in);
+#endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to unsigned long");
   return 0;
@@ -345,6 +435,9 @@ uint32_t float_interval_to_ulong(float_interval_t in){
 uint64_t float_interval_to_ulong_long(float_interval_t in){
 #ifdef TRACKING
   check();
+#endif
+#ifdef WIDE
+  check_wide(in);
 #endif
   if(is_singleton(in)) return in.lower;
   assert(false && "Failed to convert interval to unsigned long long");
