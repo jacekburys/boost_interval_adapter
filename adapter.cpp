@@ -14,6 +14,7 @@ static float_interval_t previous;
 bool initialized = false;
 
 void check(){
+  if(tracked == NULL) return;
 //  printf("check\n");
   if(!initialized){
     previous = *tracked;
